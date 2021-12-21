@@ -1,5 +1,7 @@
+import json
 from abc import ABC, abstractmethod
 from io import StringIO
+from os.path import exists
 
 from evomol.evaluation_dft import rdkit_mm_xyz, obabel_mmff94_xyz
 from evomol.evaluation_entropy import extract_shingles
@@ -426,10 +428,16 @@ class ShinglesVectDesc(Descriptor):
         :param lvl: diameter of shingles
         :param vect_size: size of the output vector. Limits the maximum number of shingles that can be processed
         :param count: whether to count the number of shingles or to indicate their boolean presence
-        :param external_desc_id_dict: external dictionary mapping a shingle smiles with an integer id that is used as
-        index in the output descriptor vector
+        :param external_desc_id_dict: external dictionary or path to an external dictionary that maps a shingle smiles
+        with an integer id that is used as index in the output descriptor vector
         """
         super().__init__(cache_location=cache_location)
+
+        if isinstance(external_desc_id_dict, str) and exists(external_desc_id_dict):
+            with open(external_desc_id_dict, "r") as f:
+                external_desc_id_dict = json.load(f)
+
+        print(external_desc_id_dict)
 
         self.lvl = lvl
         self.vect_size = vect_size
