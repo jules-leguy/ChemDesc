@@ -38,10 +38,12 @@ class Descriptor(TransformerMixin, BaseEstimator, ABC):
 
         self.cache_geom_fun = Memory(cache_location,
                                      verbose=0).cache(self.geometry_function)
+        self.cache_location = cache_location
         self.n_jobs = n_jobs
         self.batch_size = batch_size
         self.pre_dispatch = pre_dispatch
         self.MM_program = MM_program
+        self.MM_program_parameters = MM_program_parameters
 
         if MM_program_parameters is None and "rdkit" in MM_program:
             geometry_function_parameters = {"max_iterations": 500}
@@ -154,7 +156,7 @@ def _CoulombMatrixDesc_compute_from_ASE(cm_builder, ase_mol, smiles, n_atoms_max
 class CoulombMatrixDesc(Descriptor):
 
     def __init__(self, cache_location=None, n_atoms_max=100, n_jobs=1, batch_size='auto', pre_dispatch='2 * n_jobs',
-                 MM_program="obabel", MM_program_parameters=None):
+                 MM_program="obabel_mmff94", MM_program_parameters=None):
         """
 
         Lauri Himanen et al., « DScribe: Library of Descriptors for Machine Learning in Materials Science »,
@@ -222,7 +224,7 @@ def _SOAPDesc_compute_from_ASE(soap_builder, ase_mol, smiles, rcut, nmax, lmax, 
 class SOAPDesc(Descriptor):
 
     def __init__(self, cache_location=None, rcut=6.0, nmax=8, lmax=6, species="default", average="inner", n_jobs=1,
-                 batch_size='auto', pre_dispatch='2 * n_jobs', n_atoms_max=None, MM_program="obabel",
+                 batch_size='auto', pre_dispatch='2 * n_jobs', n_atoms_max=None, MM_program="obabel_mmff94",
                  MM_program_parameters=None):
         """
         SOAP descriptor
@@ -439,6 +441,7 @@ class ShinglesVectDesc(Descriptor):
             with open(external_desc_id_dict, "r") as f:
                 external_desc_id_dict = json.load(f)
 
+        self.external_desc_id_dict = external_desc_id_dict
         print(external_desc_id_dict)
 
         self.lvl = lvl
