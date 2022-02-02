@@ -290,7 +290,7 @@ class SOAPDesc(Descriptor):
             # Computing descriptor
             soap_desc, soap_success = self.cache_desc_fun(self.soap, ase_mol, smiles, rcut=self.rcut, nmax=self.nmax,
                                                           lmax=self.lmax, species=self.species, average=self.average,
-                                                          n_max_atoms=self.n_atoms_max,
+                                                          n_atoms_max=self.n_atoms_max,
                                                           geom_function_name=self.geometry_function.__name__)
 
             complete_desc[:len(soap_desc)] = soap_desc
