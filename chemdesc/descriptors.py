@@ -366,12 +366,14 @@ class MBTRDesc(Descriptor):
             k2={
                 "geometry": {"function": "inverse_distance"},
                 "grid": {"min": 0.25, "max": 1.25, "n": self.inverse_distances_n, "sigma": 0.1},
-                "weighting": {"function": "exp", "scale": 0.75, "cutoff": 1e-2}
+                # Using both threshold and cutoff for compatibility with all dscribe versions
+                "weighting": {"function": "exp", "scale": 0.75, "cutoff": 1e-2, "threshold": 1e-2}
             },
             k3={
                 "geometry": {"function": "cosine"},
                 "grid": {"min": -1, "max": 1, "n": self.cosine_angles_n, "sigma": 0.1},
-                "weighting": {"function": "exp", "scale": 0.5, "cutoff": 1e-3}
+                # Using both threshold and cutoff for compatibility with all dscribe versions
+                "weighting": {"function": "exp", "scale": 0.5, "cutoff": 1e-3, "threshold": 1e-2}
             },
             periodic=False,
             normalization=self.normalization,
