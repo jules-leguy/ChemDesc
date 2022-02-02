@@ -14,5 +14,7 @@ $ cd path/to/chemdesc/installation                        # Go to the directory 
 $ git clone https://github.com/jules-leguy/ChemDesc.git   # Clone ChemDesc
 $ cd chemdesc                                             # Move into ChemDesc directory
 $ conda activate evomolenv                                # Activate environment
+$ conda install -c conda-forge dscribe                    # Installing DScribe dependency
+$ conda install scikit-learn                              # Installing Scikit-Learn dependency
 $ python -m pip install .                                 # Install ChemDesc
 ```
