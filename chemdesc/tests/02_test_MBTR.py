@@ -1,6 +1,8 @@
 from chemdesc import MBTRDesc
 
-s = MBTRDesc()
+s = MBTRDesc(MM_program="rdkit_uff")
 
-
-print(s.fit_transform(["CNF"]))
+desc, success = s.fit_transform(["O=O"])
+print(desc)
+print(desc.sum())
+print(success)

@@ -1,4 +1,5 @@
 import json
+import traceback
 from abc import ABC, abstractmethod
 from io import StringIO
 from os.path import exists
@@ -315,9 +316,9 @@ def _MBTRDesc_compute_from_ASE(mbtr_builder, ase_mol, smiles, species, atomic_nu
 
     except Exception as e:
         print("MBTR failing for " + smiles)
-        print(e)
         cm_desc = np.zeros((mbtr_builder.get_number_of_features()))
         success = False
+
 
     return cm_desc, success
 
