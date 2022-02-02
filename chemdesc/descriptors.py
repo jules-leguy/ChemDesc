@@ -1,5 +1,4 @@
 import json
-import traceback
 from abc import ABC, abstractmethod
 from io import StringIO
 from os.path import exists
