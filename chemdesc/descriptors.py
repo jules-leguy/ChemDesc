@@ -18,7 +18,7 @@ import tqdm
 class Descriptor(TransformerMixin, BaseEstimator, ABC):
 
     def __init__(self, cache_location=None, n_jobs=1, batch_size='auto', pre_dispatch='2 * n_jobs',
-                 MM_program="obabel_mmff94", MM_program_parameters=None):
+                 MM_program="obabel_mmff94", MM_program_parameters=None, disable_tqdm=False):
         """
         :param cache_location: path of the joblib.Memory data
         :param n_jobs: number of jobs used for parallel computation of the descriptors
@@ -26,7 +26,8 @@ class Descriptor(TransformerMixin, BaseEstimator, ABC):
             - "obabel_mmff94" or "obabel" to compute MM with OpenBabel using the MMFF94 force field
             - "rdkit_mmff94" or "rdkit" to compute MM with RDKit using the MMFF94 force field
             - "rdkit_uff" to compute MM with RDKit using the UFF force field
-        :param MM_program_parameters: parameters to be given to the MM programm function
+        :param MM_program_parameters: parameters to be given to the MM programm function:
+        :param disable_tqdm: whether to disable tqdm output (progress bar)
         """
 
         if MM_program == "obabel" or MM_program == "obabel_mmff94":
@@ -53,6 +54,8 @@ class Descriptor(TransformerMixin, BaseEstimator, ABC):
             geometry_function_parameters = MM_program_parameters
 
         self.geometry_function_parameters = geometry_function_parameters
+
+        self.disable_tqdm = disable_tqdm
 
         print("MM program : " + str(MM_program))
 
@@ -91,7 +94,7 @@ class Descriptor(TransformerMixin, BaseEstimator, ABC):
     def transform(self, X):
         # Performing a parallel computation of the descriptor
         results_parallel = Parallel(n_jobs=self.n_jobs, batch_size=self.batch_size, pre_dispatch=self.pre_dispatch)(
-            delayed(self.transform_row)(X[i]) for i in tqdm.tqdm(range(len(X))))
+            delayed(self.transform_row)(X[i]) for i in tqdm.tqdm(range(len(X)), disable=self.disable_tqdm))
 
         results = np.zeros((self.descriptors_shape(len(X))))
         successes_comput = np.full((len(X),), False)
@@ -475,7 +478,7 @@ class ShinglesVectDesc(Descriptor):
 
         desc = np.zeros((len(X), self.vect_size))
 
-        for i, smi in enumerate(tqdm.tqdm(X)):
+        for i, smi in enumerate(tqdm.tqdm(X, disable=self.disable_tqdm)):
 
             found_shingles = self.cache_desc_fun(smi, self.lvl, as_list=self.count)
             curr_shg_vect = np.zeros((self.vect_size,))
