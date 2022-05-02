@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from io import StringIO
 from os.path import exists
 
+import scipy
 from evomol.evaluation_dft import rdkit_mm_xyz, obabel_mmff94_xyz
 from evomol.evaluation_entropy import extract_shingles
 from sklearn.base import TransformerMixin, BaseEstimator
@@ -321,7 +322,6 @@ def _MBTRDesc_compute_from_ASE(mbtr_builder, ase_mol, smiles, species, atomic_nu
         cm_desc = np.zeros((mbtr_builder.get_number_of_features()))
         success = False
 
-
     return cm_desc, success
 
 
@@ -489,3 +489,29 @@ class ShinglesVectDesc(Descriptor):
             desc[i] = curr_shg_vect
 
         return desc, np.full((len(X),), True)
+
+
+class RandomGaussianVectorDesc(Descriptor):
+
+    def __init__(self, cache_location=None, mu=0, sigma=1, vect_size=4000):
+        """
+        Gaussian random descriptor
+        :param mu: mean of the Gaussian distribution
+        :param sigma: standard deviation of the Gaussian distribution
+        :param vect_size: size of the descriptor
+        """
+
+        super().__init__(cache_location=cache_location)
+        self.mu = mu
+        self.sigma = sigma
+        self.vect_size = vect_size
+
+    def get_row_size(self):
+        return self.vect_size
+
+    def min_row_size(self):
+        return self.vect_size
+
+    def transform_row(self, smiles):
+        return np.random.normal(self.mu, self.sigma, self.vect_size), True
+
