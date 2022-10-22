@@ -12,7 +12,7 @@ def _get_requirements(file_name="requirements.txt"):
 
 
 setup(name='chemdesc',
-      version='0.2.1',
+      version='0.3.0',
       description='Parallel descriptors computation for molecular chemistry',
       url='https://github.com/jules-leguy/ChemDesc',
       author='Jules Leguy',
