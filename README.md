@@ -14,6 +14,6 @@ $ cd path/to/chemdesc/installation                        # Go to the directory 
 $ git clone https://github.com/jules-leguy/ChemDesc.git   # Clone ChemDesc
 $ cd ChemDesc                                             # Move into ChemDesc directory
 $ conda activate evomolenv                                # Activate environment
-$ conda install -c conda-forge dscribe                    # Installing DScribe dependency
+$ conda install -c conda-forge dscribe==1.2.1             # Installing DScribe dependency
 $ python -m pip install .                                 # Install ChemDesc
 ```
